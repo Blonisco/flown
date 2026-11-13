@@ -1,11 +1,15 @@
 cmake_minimum_required(VERSION 3.19)
 project(whu LANGUAGES CXX)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets)
 
 qt_standard_project_setup()
 
-qt_add_executable(whu
+add_subdirectory(src/core)
+
+qt_add_executable(flown
     WIN32 MACOSX_BUNDLE
     main.cpp
     src/gui/mainwindow.cpp
@@ -13,20 +17,20 @@ qt_add_executable(whu
     src/gui/mainwindow.ui
 )
 
-target_link_libraries(whu
+target_link_libraries(flown
     PRIVATE
-        Qt::Core
+        flown_core
         Qt::Widgets
 )
 
-install(TARGETS whu
+install(TARGETS flown
     BUNDLE  DESTINATION .
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
 qt_generate_deploy_app_script(
-    TARGET whu
+    TARGET flown
     OUTPUT_SCRIPT deploy_script
     NO_UNSUPPORTED_PLATFORM_ERROR
 )
