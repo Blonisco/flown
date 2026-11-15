@@ -3,7 +3,9 @@ project(whu LANGUAGES CXX)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets)
+find_package(Qt6 6.5 REQUIRED COMPONENTS Core Sql Widgets Test)
+
+include(CTest)
 
 qt_standard_project_setup()
 
