@@ -20,6 +20,7 @@ public:
     ResourceStore &operator=(const ResourceStore &) = delete;
 
     bool open();
+    bool isOpen() const;
     QString lastError() const;
 
     bool saveResource(const model::Resource &resource);
@@ -39,6 +40,7 @@ private:
     QSqlDatabase db_;
     QString connectionName_;
     QString error_;
+    bool initialized_ = false;
 };
 
 } // namespace flown::storage

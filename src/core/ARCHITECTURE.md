@@ -4,7 +4,7 @@
 
 `core/model` 定义领域模型：`Resource` 表示文件、目录或网页的引用，`Context` 表示命名情景及其包含的资源 ID。资源的实际内容不存入数据库。
 
-`core/storage` 负责持久化。`ResourceStore` 使用 Qt SQL 的 SQLite 驱动，创建时接收数据库路径；调用 `open()` 打开连接并初始化表结构。每个 `ResourceStore` 实例使用独立的 Qt SQL 连接。
+`core/storage` 负责持久化。`ResourceStore` 使用 Qt SQL 的 SQLite 驱动，创建时接收数据库路径并打开连接、初始化表结构。调用方可用 `isOpen()` 检查初始化结果，并在失败时通过 `lastError()` 查看错误。`open()` 仍可用于重试初始化，成功后重复调用也安全。每个 `ResourceStore` 实例使用独立的 Qt SQL 连接。
 
 `core/test` 留作 Core 测试目录。
 

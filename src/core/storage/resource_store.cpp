@@ -24,6 +24,7 @@ ResourceStore::ResourceStore(const QString &databasePath)
 {
     db_ = QSqlDatabase::addDatabase(QStringLiteral("QSQLITE"), connectionName_);
     db_.setDatabaseName(databasePath);
+    open();
 }
 
 ResourceStore::~ResourceStore()
@@ -34,6 +35,7 @@ ResourceStore::~ResourceStore()
 }
 
 QString ResourceStore::lastError() const { return error_; }
+bool ResourceStore::isOpen() const { return initialized_; }
 bool ResourceStore::fail(const QString &message) { error_ = message; return false; }
 
 bool ResourceStore::execute(const QString &sql)
@@ -44,6 +46,7 @@ bool ResourceStore::execute(const QString &sql)
 
 bool ResourceStore::open()
 {
+    if (initialized_) return true;
     if (!db_.open()) return fail(db_.lastError().text());
     if (!execute(QStringLiteral("PRAGMA foreign_keys = ON"))) return false;
     if (!execute(QStringLiteral("CREATE TABLE IF NOT EXISTS resources ("
@@ -55,8 +58,11 @@ bool ResourceStore::open()
         "context_id TEXT NOT NULL REFERENCES contexts(id) ON DELETE CASCADE, "
         "resource_id TEXT NOT NULL REFERENCES resources(id) ON DELETE CASCADE, "
         "PRIMARY KEY (context_id, resource_id))"))) return false;
-    return execute(QStringLiteral("CREATE INDEX IF NOT EXISTS context_resources_resource_id "
-                                  "ON context_resources(resource_id)"));
+    if (!execute(QStringLiteral("CREATE INDEX IF NOT EXISTS context_resources_resource_id "
+                                "ON context_resources(resource_id)"))) return false;
+    initialized_ = true;
+    error_.clear();
+    return true;
 }
 
 bool ResourceStore::saveResource(const model::Resource &resource)

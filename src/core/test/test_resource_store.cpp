@@ -19,6 +19,7 @@ private slots:
     void persistsAcrossInstances();
     void invalidInputAndMissingRecords();
     void defaultEmptyFields();
+    void constructorOpenFailure();
 };
 
 void ResourceStoreTest::resourceRoundTripAndUpdate()
@@ -26,7 +27,8 @@ void ResourceStoreTest::resourceRoundTripAndUpdate()
     QTemporaryDir dir;
     QVERIFY(dir.isValid());
     ResourceStore store(dir.filePath("catalog.sqlite"));
-    QVERIFY2(store.open(), qPrintable(store.lastError()));
+    QVERIFY2(store.isOpen(), qPrintable(store.lastError()));
+    QVERIFY(store.open());
     const QUuid id = QUuid::createUuid();
     const QUrl file = QUrl::fromLocalFile(dir.filePath("a file.txt"));
     QVERIFY2(store.saveResource({id, Resource::Type::File, file, "Original"}), qPrintable(store.lastError()));
@@ -155,6 +157,15 @@ void ResourceStoreTest::defaultEmptyFields()
     QCOMPARE(store.context(id)->description(), QStringLiteral(""));
     QVERIFY2(store.saveContext(Context(id, "Updated")), qPrintable(store.lastError()));
     QCOMPARE(store.context(id)->description(), QStringLiteral(""));
+}
+
+void ResourceStoreTest::constructorOpenFailure()
+{
+    QTemporaryDir dir;
+    QVERIFY(dir.isValid());
+    ResourceStore store(dir.path());
+    QVERIFY(!store.isOpen());
+    QVERIFY(!store.lastError().isEmpty());
 }
 
 QTEST_GUILESS_MAIN(ResourceStoreTest)
