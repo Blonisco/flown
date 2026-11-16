@@ -21,7 +21,7 @@ void ResourceLauncherTest::opensWebUrl()
     ResourceLauncher launcher([&](const QUrl &url) { opened = url; return true; });
     const QUrl web(QStringLiteral("https://example.com/a%20b?q=hello%20world"));
     QCOMPARE(launcher.launch({QUuid::createUuid(), Resource::Type::Url, web, {}}),
-             ResourceLauncher::Result::Opened);
+             ResourceLauncher::Result::OpenRequestAccepted);
     QCOMPARE(opened, web);
 }
 
@@ -33,7 +33,7 @@ void ResourceLauncherTest::opensDirectory()
     ResourceLauncher launcher([&](const QUrl &url) { opened = url; return true; });
     const QUrl folder = QUrl::fromLocalFile(dir.path());
     QCOMPARE(launcher.launch({QUuid::createUuid(), Resource::Type::Directory, folder, {}}),
-             ResourceLauncher::Result::Opened);
+             ResourceLauncher::Result::OpenRequestAccepted);
     QCOMPARE(opened, folder);
 }
 

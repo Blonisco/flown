@@ -1,8 +1,9 @@
 #include "resource_launcher.h"
 
 #include <QDesktopServices>
-#include <QDir>
 #include <QFileInfo>
+
+#include <utility>
 
 namespace flown::launch {
 
@@ -31,7 +32,7 @@ ResourceLauncher::Result ResourceLauncher::launch(const model::Resource &resourc
         return Result::UnsupportedType;
     }
 
-    return openUrl_(url) ? Result::Opened : Result::OpenFailed;
+    return openUrl_(url) ? Result::OpenRequestAccepted : Result::OpenFailed;
 }
 
 } // namespace flown::launch

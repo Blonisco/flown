@@ -10,7 +10,7 @@ namespace flown::launch {
 class ResourceLauncher {
 public:
     enum class Result {
-        Opened,
+        OpenRequestAccepted,
         InvalidLocation,
         MissingDirectory,
         UnsupportedType,
