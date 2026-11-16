@@ -8,6 +8,8 @@
 
 `core/test` 留作 Core 测试目录。
 
+`core/launch` 负责启动资源。`ResourceLauncher::launch(const Resource&)` 按 `Resource::Type` 分发，使用 `Resource::location` 中的 `QUrl` 调用系统默认程序。当前支持 `Url`（HTTP/HTTPS 网页）和 `Directory`（存在的本地文件夹）；`File` 暂未实现。启动结果以 `Result` 返回：成功、地址无效、文件夹不存在、类型不支持或系统打开失败。构造函数可注入打开函数，方便在测试中验证分发而不实际启动浏览器或文件管理器。
+
 ## 数据模型
 
 资源和情景是多对多关系：一个情景可包含多个资源，同一资源也可被多个情景引用。

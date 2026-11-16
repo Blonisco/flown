@@ -1,3 +1,7 @@
 add_executable(flown_core_storage_test test_resource_store.cpp)
 target_link_libraries(flown_core_storage_test PRIVATE flown_core Qt6::Test)
 add_test(NAME flown_core_storage_test COMMAND flown_core_storage_test)
+
+add_executable(flown_core_launch_test test_resource_launcher.cpp)
+target_link_libraries(flown_core_launch_test PRIVATE flown_core Qt6::Test)
+add_test(NAME flown_core_launch_test COMMAND flown_core_launch_test)
